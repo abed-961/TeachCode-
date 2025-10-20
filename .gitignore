@@ -1,0 +1,100 @@
+# =========================================
+# GLOBAL SETTINGS
+# =========================================
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temporary or backup files
+*.tmp
+*.temp
+*.swp
+*.bak
+
+# =========================================
+# FRONTEND (React)
+# =========================================
+
+frontend/.DS_Store
+# Node dependencies
+frontend/node_modules/
+
+# Build outputs
+frontend/build/
+frontend/dist/
+
+# Testing
+frontend/coverage/
+
+# Cache
+frontend/.cache/
+frontend/.parcel-cache/
+frontend/.eslintcache
+
+# Optional lock files (uncomment if not tracking)
+# frontend/package-lock.json
+# frontend/yarn.lock
+# frontend/pnpm-lock.yaml
+
+# =========================================
+# BACKEND (Laravel)
+# =========================================
+
+# Composer dependencies
+backend/vendor/
+backedn/.DS_Store
+# Environment files
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Laravel storage and cache
+backend/storage/*.key
+backend/storage/app/public
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/logs/*.log
+
+# Laravel bootstrap cache
+backend/bootstrap/cache/*.php
+
+# Public build or hot files (Mix / Vite)
+backend/public/hot
+backend/public/mix-manifest.json
+backend/public/build/
+
+# Composer PHAR
+backend/composer.phar
+
+# =========================================
+# MISC / TOOLING
+# =========================================
+
+# Yarn / NPM integrity files
+.yarn-integrity
+.pnp.*
+.pnp.js
+
+# Coverage reports
+coverage/
+.lcov
+
+# Reports / artifacts
+report.xml
+coverage-final.json
+
