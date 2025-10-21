@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RegisterUser } from "../../../services/UserServices";
 import Cookies from "js-cookie";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useMutation } from "@tanstack/react-query";
 
 const fieldsetStyle = {
     input: { color: "white" },
@@ -65,29 +66,29 @@ export default function Register({ setAlert }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setSuccess("");
-        setLoading(true);
-
-        register();
-    };
-
-    const register = async () => {
-        try {
-            const data = await RegisterUser(formData);
-
+    const mutation = useMutation({
+        mutationFn: RegisterUser,
+        onSuccess: (data) => {
             Cookies.set("user", data.data.id, { expires: 7 });
             setAlert(data.data.message, "success");
             navigate("/");
-        } catch (error) {
+        },
+        onError: (error) => {
             const errors = error.response.data.errors;
             setAlert("somthing went wrong", "error");
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({ ...prev, [key]: errors[key][0] }));
             });
-        }
+        },
+    });
+
+    const handleSubmit = async (e) => {
+        console.log("on");
+        e.preventDefault();
+        setError("");
+        setSuccess("");
+        setLoading(true);
+        mutation.mutate(formData);
         setLoading(false);
     };
 
@@ -243,6 +244,7 @@ export default function Register({ setAlert }) {
                     type="submit"
                     variant="contained"
                     className="btn"
+                    onClick={handleSubmit}
                     disabled={loading}
                 >
                     {loading ? "Registering..." : "Register"}
