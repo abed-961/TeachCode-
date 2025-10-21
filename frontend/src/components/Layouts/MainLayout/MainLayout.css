@@ -1,0 +1,276 @@
+/* Base layout */
+.main-grid {
+    width: 100%;
+    min-height: 100vh;
+    gap: var(--gap);
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: var(--header-h) 1fr var(--footer-h);
+    grid-template-areas:
+        "header header"
+        "sidebar content"
+        "sidebar footer";
+    gap: var(--gap);
+    background: linear-gradient(
+        180deg,
+        var(--color-gray-950),
+        var(--color-gray-900),
+        var(--color-gray-800),
+        60%
+    );
+    color: var(--surface);
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial;
+}
+
+.header,
+.content,
+.footer,
+.sidebar {
+    border: 1px solid var(--muted);
+}
+
+/* Header */
+.header {
+    grid-area: header;
+
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    border-radius: var(--radius);
+    backdrop-filter: blur(6px);
+    align-self: start;
+}
+
+.btn {
+    padding: var(--btn-padding);
+    border-radius: var(--btn-radius);
+    background: linear-gradient(
+        to right,
+        var(--color-indigo-300),
+        var(--color-indigo-400) 50%,
+        var(--color-indigo-500),
+        var(--color-indigo-600)
+    );
+    box-shadow: 0 0 4px var(--surface);
+
+    transition: 0.5s ease;
+}
+
+.btn:hover {
+    color: var(--surface);
+}
+
+a {
+    color: var(--text);
+    text-decoration: none;
+    transition: 0.5s ease;
+}
+
+.nav-links .btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 1px 2px 9px var(--surface);
+    color: var(--muted);
+}
+/* Content area */
+.content {
+    grid-area: content;
+    padding: 18px;
+    background: var(--color-gray-900);
+    border-radius: var(--radius);
+    overflow: auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    color: var(--surface);
+    z-index: 1;
+}
+
+/* Footer */
+.footer {
+    grid-area: footer;
+    background: var(--color-gray-900);
+    padding: var(--padding);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    box-shadow: 0 -6px 18px rgba(2, 12, 24, 0.18);
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background: var(--color-gray-900);
+    color: var(--surface);
+    padding: 18px;
+    border-radius: var(--radius);
+    box-shadow: 6px 12px 30px rgba(2, 12, 24, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-self: stretch;
+    height: calc(100vh - 32px); /* account for outer padding */
+    position: sticky;
+    top: 16px;
+    overflow: auto;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* Sidebar items */
+.sidebar .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.sidebar a {
+    color: var(--surface);
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: background 0.18s ease, transform 0.12s ease;
+    font-weight: 500;
+}
+.sidebar a:hover,
+.sidebar a:focus {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateX(6px);
+    outline: none;
+}
+.sidebar .logo {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.svg {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    z-index: -1;
+}
+.svg:nth-child(1) {
+    top: 20px;
+    left: 20px;
+}
+
+.svg:nth-child(2) {
+    top: 20px;
+    right: 0;
+    transform: rotate(90deg);
+}
+
+.svg:nth-child(3) {
+    position: fixed;
+    width: 100%;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    opacity: 0.2;
+    box-shadow: 0 0 12px var(--surface);
+    transform: translate(-50%, -50%);
+}
+
+/* small enhancements */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Responsive: collapse to single column and use off-canvas sidebar */
+@media (max-width: 900px) {
+    :root {
+        --sidebar-w: 320px;
+    } /* slightly wider off-canvas */
+    .main-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: var(--header-h) 1fr var(--footer-h);
+        grid-template-areas:
+            "header"
+            "content"
+            "footer";
+        padding: 12px;
+    }
+
+    /* Sidebar becomes off-canvas */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: var(--sidebar-w);
+        transform: translateX(-110%);
+        z-index: 1200;
+        box-shadow: 12px 12px 48px rgba(2, 12, 24, 0.6);
+        border-radius: 0 12px 12px 0;
+        padding-top: var(--header-h);
+        transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    /* when parent has this class, sidebar opens */
+    .main-grid.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    /* dim overlay when open */
+    .main-grid.sidebar-open::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 8, 18, 0.45);
+        z-index: 1100;
+        pointer-events: auto;
+    }
+
+    /* show toggle */
+    .header .sidebar-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* header styling for mobile */
+    .header {
+        padding: 10px 12px;
+    }
+
+    /* keep content readable */
+    .content {
+        padding: 12px;
+    }
+    .footer {
+        padding: 12px;
+    }
+
+    /* make sidebar items easier to tap */
+    .sidebar a {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+}
+
+/* Very small screens: tighten spacing */
+@media (max-width: 420px) {
+    :root {
+        --gap: 12px;
+        --header-h: 56px;
+        --footer-h: 44px;
+    }
+    .header .title {
+        font-size: 0.95rem;
+    }
+    .sidebar {
+        width: 280px;
+    }
+}
