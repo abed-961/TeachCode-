@@ -8,9 +8,10 @@ import {
     InputAdornment,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import http from "../../../env/axios.jsx";
 import Cookies from "js-cookie";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useMutation } from "@tanstack/react-query";
+import { LoginUser } from "../../../services/UserServices.jsx";
 
 const fieldsetStyle = {
     input: { color: "white" },
@@ -26,6 +27,7 @@ const fieldsetStyle = {
     },
 };
 export default function Login({ setAlert }) {
+    // state
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [show, setShow] = useState(false);
@@ -37,7 +39,7 @@ export default function Login({ setAlert }) {
     });
 
     const navigate = useNavigate();
-
+    // functions
     useEffect(() => {
         const user = JSON.parse(Cookies.get("user") || null);
         if (user) {
@@ -49,37 +51,35 @@ export default function Login({ setAlert }) {
         e.preventDefault();
 
         setLoading(true);
-        signIn();
     };
 
-    async function signIn() {
-        let data = "";
-        try {
-            data = await http.post("/api/login", {
-                email: email,
-                password: password,
-            });
-        } catch (error) {
-            setAlert("failed to log in ", "error");
-            const errors = error.response.data.errors;
+    //query client
+    const mutation = useMutation({
+        mutationFn: LoginUser,
+        onSuccess: (data) => {
+            setLoading(false);
 
+            if (data.status) {
+                Cookies.set("user", JSON.stringify(data.data.id), {
+                    expires: 7,
+                });
+                setAlert(data.message, "success");
+                navigate("/");
+            } else {
+                setAlert(data.message, "error");
+            }
+        },
+        onError: (err) => {
+            setAlert("failed to log in ", "error");
+
+            const errors = err.response.data.errors;
+            console.log(errors);
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({ ...prev, [key]: errors[key][0] }));
             });
-        } finally {
             setLoading(false);
-            if (data)
-                if (data.data.status) {
-                    Cookies.set("user", JSON.stringify(data.data.data.id), {
-                        expires: 7,
-                    });
-                    setAlert(data.data.message, "success");
-                    navigate("/");
-                } else {
-                    setAlert(data.data.message, "error");
-                }
-        }
-    }
+        },
+    });
     const togglePassword = () => setShow((prev) => !prev);
 
     return (
@@ -152,6 +152,9 @@ export default function Login({ setAlert }) {
                     variant="contained"
                     disabled={loading}
                     className="btn"
+                    onClick={() => {
+                        mutation.mutate({ email, password });
+                    }}
                 >
                     {loading ? "Logging in..." : "Login"}
                 </Button>
