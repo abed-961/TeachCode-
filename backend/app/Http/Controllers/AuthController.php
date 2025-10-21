@@ -2,23 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\Response;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+
+        $credentials = $request->validated();
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('auth_token')->plainTextToken;
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
+            $user_id = Auth::user()->id;
+            $user = User::find($user_id);
+            $user->createToken('auth_token')->plainTextToken;
+            return Response::success('login successful', $user);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return Response::error('email or password is incorrect');
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $data = $request->validated();
+        $user = User::create($data);
+        Auth::login($user);
+        $user->createToken("user-token");
+        return Response::success('account Registered Successfully', $user);
+
     }
 }
