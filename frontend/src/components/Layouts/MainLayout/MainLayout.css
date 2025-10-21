@@ -175,6 +175,13 @@ a {
     transform: translate(-50%, -50%);
 }
 
+.svg:nth-child(4) {
+    width: 200%;
+    bottom: 0px;
+    position: fixed;
+    transform: rotate(346deg);
+}
+
 /* small enhancements */
 ::-webkit-scrollbar {
     width: 10px;

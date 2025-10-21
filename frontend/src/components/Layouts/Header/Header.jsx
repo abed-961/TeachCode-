@@ -1,9 +1,10 @@
 import React from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import Nav from "./Nav";
-import Cursor from "../Cursor";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+    const navigate = useNavigate();
     return (
         <AppBar
             sx={{
@@ -14,10 +15,12 @@ export default function Header() {
             position="static"
         >
             <Toolbar sx={{ justifyContent: "space-between" }}>
-                <Typography variant="h6">TeachCode</Typography>
+                <Typography variant="h6" onClick={() => navigate("/")}>
+                    {" "}
+                    TeachCode
+                </Typography>
                 <Nav />
             </Toolbar>
-            <Cursor />
         </AppBar>
     );
 }
