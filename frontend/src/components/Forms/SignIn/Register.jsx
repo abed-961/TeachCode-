@@ -75,7 +75,7 @@ export default function Register({ setAlert }) {
         },
         onError: (error) => {
             const errors = error.response.data.errors;
-            setAlert("somthing went wrong", "error");
+            setAlert(Object.entries(errors)[0][1][0], "error");
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({ ...prev, [key]: errors[key][0] }));
             });
@@ -83,7 +83,6 @@ export default function Register({ setAlert }) {
     });
 
     const handleSubmit = async (e) => {
-        console.log("on");
         e.preventDefault();
         setError("");
         setSuccess("");

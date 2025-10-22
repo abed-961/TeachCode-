@@ -102,8 +102,6 @@ a {
 /* Sidebar */
 .sidebar {
     grid-area: sidebar;
-    background: var(--color-gray-900);
-    color: var(--surface);
     padding: 18px;
     border-radius: var(--radius);
     box-shadow: 6px 12px 30px rgba(2, 12, 24, 0.35);
@@ -111,7 +109,6 @@ a {
     flex-direction: column;
     gap: 12px;
     align-self: stretch;
-    height: calc(100vh - 32px); /* account for outer padding */
     position: sticky;
     top: 16px;
     overflow: auto;
