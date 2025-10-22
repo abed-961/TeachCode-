@@ -1,8 +1,11 @@
 import axios from "axios";
 
+export const url = "http://localhost:8000";
+export const photoUrl = url + "/storage/";
+
 // Create a single reusable instance
 const http = axios.create({
-    baseURL: "http://localhost:8000", // Laravel backend URL
+    baseURL: url + "/api",
     withCredentials: true,
     withXSRFToken: true,
     headers: {

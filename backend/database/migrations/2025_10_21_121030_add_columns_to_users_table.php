@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('first_name');
             $table->string('last_name');
             $table->text('bio')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('photo')->default("/photos/default-photo.jpg");
             $table->string('phone');
             $table->string('country')->nullable();
             $table->string('region');

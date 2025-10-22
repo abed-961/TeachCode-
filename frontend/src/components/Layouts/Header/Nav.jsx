@@ -27,7 +27,7 @@ export default function Nav() {
                 {user && (
                     <Box sx={{ display: "flex", gap: 5 }}>
                         <Grid className="btn" item>
-                            <Link to="signin">Setting</Link>
+                            <Link to="profile/setting">Setting</Link>
                         </Grid>
                         <Grid item className="btn">
                             <Link to="register">Info</Link>

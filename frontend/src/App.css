@@ -7,3 +7,15 @@
     min-width: 80px;
     z-index: 2;
 }
+
+.w-100 {
+    width: 100%;
+}
+
+.w-100-c > * {
+    width: 100%;
+}
+
+.bg-main {
+    background-color: var(--color-gray-900) !important;
+}

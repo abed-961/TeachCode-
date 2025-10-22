@@ -58,7 +58,6 @@ export default function Login({ setAlert }) {
         mutationFn: LoginUser,
         onSuccess: (data) => {
             setLoading(false);
-
             if (data.status) {
                 Cookies.set("user", JSON.stringify(data.data.id), {
                     expires: 7,
@@ -70,10 +69,8 @@ export default function Login({ setAlert }) {
             }
         },
         onError: (err) => {
-            setAlert("failed to log in ", "error");
-
             const errors = err.response.data.errors;
-            console.log(errors);
+            setAlert(Object.entries(errors)[0][1][0], "error");
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({ ...prev, [key]: errors[key][0] }));
             });
@@ -93,6 +90,7 @@ export default function Login({ setAlert }) {
             sx={{ zIndex: 1 }}
         >
             <Box
+                className="bg-main"
                 component="form"
                 onSubmit={handleSubmit}
                 sx={{
@@ -100,7 +98,6 @@ export default function Login({ setAlert }) {
                     flexDirection: "column",
                     gap: 2,
                     p: 4,
-                    bgcolor: "var(--color-gray-900)",
                     borderRadius: 2,
                     width: "100%",
                     maxWidth: "500px",

@@ -7,7 +7,7 @@ export default function Cursor() {
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
-        setMouse({ x: mouseMove.x, y: mouseMove.y + window.scrollY });
+        setMouse({ x: mouseMove.x, y: mouseMove.y });
     }, [mouseMove]);
     return (
         <Box

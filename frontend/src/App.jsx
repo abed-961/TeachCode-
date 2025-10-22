@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+
+} from "react-router-dom";
 import MainLayout from "./components/Layouts/MainLayout/MainLayout.jsx";
 import { Alert, Box } from "@mui/material";
 import Cursor from "./components/Layouts/Cursor.jsx";
@@ -12,8 +17,12 @@ import Image from "./components/Layouts/Image.jsx";
 import { useEffect, useState } from "react";
 import Register from "./components/Forms/SignIn/Register.jsx";
 import NotFount from "./components/NotFount.jsx";
+import ProfileSetting from "./components/Forms/edit/EditProfile.jsx";
+
+import Cookies from "js-cookie";
 
 function App() {
+
     const [alert, setAlert] = useState({ message: null, type: null });
 
     useEffect(() => {
@@ -24,6 +33,8 @@ function App() {
             return () => clearTimeout(timer);
         }
     }, [alert]);
+
+   
 
     return (
         <>
@@ -36,6 +47,19 @@ function App() {
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
                             <Route index element={<div>Home Page</div>} />
+                            <Route
+                                path="profile/setting"
+                                element={
+                                    <ProfileSetting
+                                        setAlert={(message, type) => {
+                                            setAlert({
+                                                message: message,
+                                                type: type,
+                                            });
+                                        }}
+                                    />
+                                }
+                            />
                         </Route>
                         {/* login component */}
                         <Route
