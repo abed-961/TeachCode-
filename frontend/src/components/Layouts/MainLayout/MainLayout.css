@@ -60,7 +60,7 @@
 }
 
 .btn:hover {
-    color: var(--surface);
+    color: var(--surface) !important;
 }
 
 a {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const url = "http://localhost:8000";
-export const photoUrl = url + "/storage/";
+export const photoUrl = url + "/storage";
 
 // Create a single reusable instance
 const http = axios.create({

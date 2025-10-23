@@ -1,38 +1,36 @@
 import { Box, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { UserContext } from "../../../services/Contexts/userContext";
+import LoadingScreenPage from "../LoadingScreen/LoadingScreen";
 
 export default function Nav() {
-    const [user, setUser] = useState();
+    const { user, isLoading } = useContext(UserContext);
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        setUser(Cookies.get("user"));
-    }, [navigate]);
+    if (isLoading) return <LoadingScreenPage />;
+
     return (
         <>
             <Grid container spacing={2} className="nav-links">
-                {!user && (
+                {!user ? (
                     <Box sx={{ display: "flex", gap: 5 }}>
-                        <Grid className="btn" item>
+                        <Grid className="btn">
                             <Link to="signin">Log In</Link>
                         </Grid>
-                        <Grid item className="btn">
+                        <Grid className="btn">
                             <Link to="register">Register</Link>
                         </Grid>
                     </Box>
-                )}
-
-                {user && (
-                    <Box sx={{ display: "flex", gap: 5 }}>
-                        <Grid className="btn" item>
-                            <Link to="profile/setting">Setting</Link>
+                ) : (
+                    <Grid container sx={{ display: "flex", gap: 5 }}>
+                        <Grid className="btn">
+                            <Link to="profile/view">Profile</Link>
                         </Grid>
-                        <Grid item className="btn">
+                        <Grid className="btn">
                             <Link to="register">Info</Link>
                         </Grid>
-                    </Box>
+                    </Grid>
                 )}
             </Grid>
         </>

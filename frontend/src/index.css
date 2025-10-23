@@ -41,3 +41,11 @@ body {
     color: var(--surface);
     height: 100vh;
 }
+
+.c-white {
+    color: var(--color-gray-200);
+}
+
+.c-white-child * {
+    color: var(--color-gray-200) !important;
+}

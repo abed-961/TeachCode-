@@ -17,6 +17,8 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware("auth:sanctum")->group(function () {
     Route::post("/user/update", [AuthController::class, "updateUser"]);
+    Route::post("/logout", [AuthController::class, "logout"]);
+    Route::post("/delete", [AuthController::class, "deleteAccount"]);
 
 });
 
