@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Box,
     TextField,
@@ -8,10 +8,10 @@ import {
     InputAdornment,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
 import { LoginUser } from "../../../services/UserServices.jsx";
+import { UserContext } from "../../../services/Contexts/userContext.jsx";
 
 const fieldsetStyle = {
     input: { color: "white" },
@@ -32,6 +32,7 @@ export default function Login({ setAlert }) {
     const [password, setPassword] = useState("");
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { setUser } = useContext(UserContext);
 
     const [errorForm, setErrorForm] = useState({
         email: "",
@@ -39,13 +40,13 @@ export default function Login({ setAlert }) {
     });
 
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
     // functions
     useEffect(() => {
-        const user = JSON.parse(Cookies.get("user") || null);
         if (user) {
             navigate("/");
         }
-    }, [navigate]);
+    }, [navigate, user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,9 +60,7 @@ export default function Login({ setAlert }) {
         onSuccess: (data) => {
             setLoading(false);
             if (data.status) {
-                Cookies.set("user", JSON.stringify(data.data.id), {
-                    expires: 7,
-                });
+                setUser(data.data);
                 setAlert(data.message, "success");
                 navigate("/");
             } else {

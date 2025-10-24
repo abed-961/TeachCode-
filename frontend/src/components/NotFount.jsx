@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export default function NotFount() {
+export default function NotFound() {
     return (
         <Box
             sx={{

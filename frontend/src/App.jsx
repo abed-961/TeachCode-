@@ -1,10 +1,5 @@
 import "./App.css";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MainLayout from "./components/Layouts/MainLayout/MainLayout.jsx";
 import { Alert, Box } from "@mui/material";
 import Cursor from "./components/Layouts/Cursor.jsx";
@@ -16,13 +11,16 @@ import Background from "../public/images/svgviewer-output.svg";
 import Image from "./components/Layouts/Image.jsx";
 import { useEffect, useState } from "react";
 import Register from "./components/Forms/SignIn/Register.jsx";
-import NotFount from "./components/NotFount.jsx";
+import NotFound from "./components/NotFount.jsx";
 import ProfileSetting from "./components/Forms/edit/EditProfile.jsx";
 
-import Cookies from "js-cookie";
+import { UserProvider } from "./services/Contexts/userContext.jsx";
+import { useQuery } from "@tanstack/react-query";
+import { GetUser } from "./services/UserServices.jsx";
+import LoadingScreenPage from "./components/Layouts/LoadingScreen/LoadingScreen.jsx";
+import ProfileView from "./components/Forms/edit/ProfileView.jsx";
 
 function App() {
-
     const [alert, setAlert] = useState({ message: null, type: null });
 
     useEffect(() => {
@@ -34,73 +32,95 @@ function App() {
         }
     }, [alert]);
 
-   
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ["user"],
+        queryFn: GetUser,
+        staleTime: 1000 * 60 * 5,
+    });
+    const [user, setUser] = useState();
 
-    return (
-        <>
-            <Box sx={{ width: "100%", overflow: "hidden" }}>
-                <Image src={Blur1} className="svg" />
-                <Image src={Blur1} className="svg" />
-                <Image src={Background} className="svg" />
-                <Image src={Blur1} className="svg" />
-                <Router>
-                    <Routes>
-                        <Route path="/" element={<MainLayout />}>
-                            <Route index element={<div>Home Page</div>} />
+    useEffect(() => {
+        setUser(data);
+    }, [data]);
+
+    const sendAlert = (message, type) => {
+        setAlert({
+            message: message,
+            type: type,
+        });
+    };
+    if (isLoading) return <LoadingScreenPage />;
+    else
+        return (
+            <>
+                <UserProvider value={{ user, setUser, isLoading, refetch }}>
+                    <Box sx={{ width: "100%", overflow: "hidden" }}>
+                        <Image src={Blur1} className="svg" />
+                        <Image src={Blur1} className="svg" />
+                        <Image src={Background} className="svg" />
+                        <Image src={Blur1} className="svg" />
+                        <Routes>
+                            <Route path="/" element={<MainLayout />}>
+                                <Route index element={<div>Home Page</div>} />
+                                <Route
+                                    path="profile/setting"
+                                    element={
+                                        <ProfileSetting
+                                            setAlert={(message, type) =>
+                                                sendAlert(message, type)
+                                            }
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="profile/view"
+                                    element={
+                                        <ProfileView
+                                            setAlert={(message, type) => {
+                                                sendAlert(message, type);
+                                            }}
+                                        />
+                                    }
+                                />
+                            </Route>
+                            {/* login component */}
                             <Route
-                                path="profile/setting"
+                                path="signin"
                                 element={
-                                    <ProfileSetting
+                                    <SignIn
                                         setAlert={(message, type) => {
-                                            setAlert({
-                                                message: message,
-                                                type: type,
-                                            });
+                                            sendAlert(message, type);
                                         }}
                                     />
                                 }
                             />
-                        </Route>
-                        {/* login component */}
-                        <Route
-                            path="signin"
-                            element={
-                                <SignIn
-                                    setAlert={(message, type) => {
-                                        setAlert({
-                                            message: message,
-                                            type: type,
-                                        });
-                                    }}
-                                />
-                            }
-                        />
-                        {/* register component */}
-                        <Route
-                            path="register"
-                            element={
-                                <Register
-                                    setAlert={(message, type) => {
-                                        setAlert({
-                                            message: message,
-                                            type: type,
-                                        });
-                                    }}
-                                />
-                            }
-                        />
-                        <Route path="*" element={<NotFount />} />
-                    </Routes>
-                </Router>
-                <Cursor />
-                {alert.message && (
-                    <Alert severity={alert.type} className="alertMessage">
-                        {alert.message}
-                    </Alert>
-                )}
-            </Box>
-        </>
-    );
+                            {/* register component */}
+                            <Route
+                                path="register"
+                                element={
+                                    <Register
+                                        setAlert={(message, type) =>
+                                            sendAlert(message, type)
+                                        }
+                                    />
+                                }
+                            />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+
+                        <Cursor />
+                        {alert.message && (
+                            <Alert
+                                severity={alert.type}
+                                className="alertMessage"
+                            >
+                                {alert.message}
+                            </Alert>
+                        )}
+                    </Box>
+                </UserProvider>
+            </>
+        );
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Box,
     TextField,
@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterUser } from "../../../services/UserServices";
-import Cookies from "js-cookie";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
+import { UserContext } from "../../../services/Contexts/userContext";
 
 const fieldsetStyle = {
     input: { color: "white" },
@@ -56,11 +56,12 @@ export default function Register({ setAlert }) {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [show, setShow] = useState(false);
+    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
-        const user = JSON.parse(Cookies.get("user") || null);
         if (user) navigate("/");
-    }, [navigate]);
+    }, [navigate, user]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -69,8 +70,8 @@ export default function Register({ setAlert }) {
     const mutation = useMutation({
         mutationFn: RegisterUser,
         onSuccess: (data) => {
-            Cookies.set("user", data.data.id, { expires: 7 });
-            setAlert(data.data.message, "success");
+            setUser(data.data);
+            setAlert(data.message, "success");
             navigate("/");
         },
         onError: (error) => {

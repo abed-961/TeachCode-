@@ -47,7 +47,7 @@ class AuthController extends Controller
             $photo = $request->file('photo');
             $photoName = time() . "Teach_Code" . $photo->getClientOriginalName();
 
-            $data["photo"] = $photo->storeAs('photos', $photoName, 'public');
+            $data["photo"] = '/' . $photo->storeAs('photos', $photoName, 'public');
 
         }
         try {
@@ -59,5 +59,28 @@ class AuthController extends Controller
 
 
 
+    }
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->tokens()->where('tokenable_id', $user->id)->delete();
+        return Response::success("user logged out  successfully");
+    }
+
+    public function deleteAccount(Request $request)
+    {
+
+        $user = $request->user();
+        $credentials = $request->validate([
+            'current_password' => ['required', 'current_password']
+        ]);
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->tokens()->delete();
+        $user->delete();
+        return Response::success("User Deleted Successfully");
     }
 }

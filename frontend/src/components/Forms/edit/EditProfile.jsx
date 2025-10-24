@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     Box,
     TextField,
     Button,
     Grid,
-    MenuItem,
-    Avatar,
     IconButton,
     InputAdornment,
     Typography,
     Paper,
+    Modal,
 } from "@mui/material";
-import {
-    Visibility,
-    VisibilityOff,
-    PhotoCamera,
-    Co2Sharp,
-} from "@mui/icons-material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUser, updateUser } from "../../../services/UserServices";
+import { Visibility, VisibilityOff, PhotoCamera } from "@mui/icons-material";
+import { useMutation } from "@tanstack/react-query";
+import { DeleteUser, UpdateUser } from "../../../services/UserServices";
 import { photoUrl } from "../../../env/axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../services/Contexts/userContext";
 
 const fieldsetStyle = {
     input: { color: "white" },
@@ -53,6 +49,7 @@ const inputStyle = {
 };
 
 export default function ProfileSetting({ setAlert }) {
+    const [open, setOpen] = useState();
     const [error, setError] = useState({});
     const [photo, setPhoto] = useState("");
     const [isChange, setIsChange] = useState(false);
@@ -71,14 +68,16 @@ export default function ProfileSetting({ setAlert }) {
         role: "user",
     });
 
-    const { data: user, isLoading } = useQuery({
-        queryKey: ["user"],
-        queryFn: getUser,
+    const [password, setPassword] = useState({
+        current_password: "",
     });
+
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) setFormData(user);
-    }, [user]);
+    }, [user, navigate]);
 
     useEffect(() => {
         if (!passwordEmpty()) setIsChange(true);
@@ -86,7 +85,7 @@ export default function ProfileSetting({ setAlert }) {
     }, [formData, photo]);
 
     const mutation = useMutation({
-        mutationFn: updateUser,
+        mutationFn: UpdateUser,
         onSuccess: (res) => {
             setAlert(res.message, "success");
             setIsChange(false);
@@ -121,11 +120,6 @@ export default function ProfileSetting({ setAlert }) {
         }
     };
 
-    if (isLoading)
-        return (
-            <div style={{ color: "var(--color-indigo-600)" }}>Loading ...</div>
-        );
-
     const handleSubmit = (e) => {
         data.append("photo", photo);
         Object.keys(formData).forEach((key) => {
@@ -136,6 +130,29 @@ export default function ProfileSetting({ setAlert }) {
 
         mutation.mutate(data);
     };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const mutationDelete = useMutation({
+        mutationFn: DeleteUser,
+        mutationKey: ["user"],
+        onSuccess: (res) => {
+            if (res.status) {
+                setAlert(res.message, "success");
+                setUser(false);
+                navigate("/signin");
+            } else {
+                setAlert("Something Went Wrong", "error");
+            }
+        },
+        onError: () => {
+            setAlert("Something Went Wrong", "error");
+        },
+    });
 
     return (
         <Paper sx={{ p: 4, mx: "auto", m: 2 }} className="bg-main">
@@ -435,13 +452,183 @@ export default function ProfileSetting({ setAlert }) {
                             className="btn"
                             size="large"
                         >
-                            {!isChange
-                                ? "Please Change Your Information And Type your current Password Before Submiting"
-                                : " Save Changes "}
+                            {" "}
+                            Save Changes
                         </Button>
+                        <p style={{ color: "white", textAlign: "center" }}>
+                            Please Change Your Information And Type your current
+                            Password Before Submiting
+                        </p>
                     </Grid>
                 </Grid>
             </Box>
+            <Grid
+                item
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: 2,
+                }}
+            >
+                <Button
+                    className="btn"
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                        textTransform: "none",
+                        borderColor: "#dbdbdb",
+                        color: "white",
+                        margin: "0 auto",
+                    }}
+                    onClick={handleOpen}
+                >
+                    Delete Account
+                </Button>
+            </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="child-modal-title"
+                aria-describedby="child-modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: { xs: "90%", sm: 400 },
+                        backgroundColor: "var(--color-gray-950) !important",
+                        borderRadius: 3,
+                        boxShadow: 24,
+                        p: 4,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 3,
+                        background: "rgba(30,30,30,0.95)",
+                        backdropFilter: "blur(12px)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                >
+                    <h2
+                        id="child-modal-title"
+                        style={{
+                            textAlign: "center",
+                            color: "#ff5252",
+                            fontWeight: 600,
+                            fontSize: "1.3rem",
+                            marginBottom: "10px",
+                        }}
+                    >
+                        Are you sure you want to delete your account?
+                    </h2>
+
+                    {/* Password Field */}
+                    <Grid item xs={12} sx={{ width: "100%" }}>
+                        <TextField
+                            onChange={(e) => {
+                                setPassword({
+                                    current_password: e.target.value,
+                                });
+                            }}
+                            inputProps={{
+                                style: { color: "white", fontSize: "0.9rem" },
+                            }}
+                            InputLabelProps={{
+                                style: { color: "#ccc", fontSize: "0.9rem" },
+                            }}
+                            sx={{
+                                width: "100%",
+                                "& .MuiOutlinedInput-root": {
+                                    "& fieldset": { borderColor: "#666" },
+                                    "&:hover fieldset": { borderColor: "#aaa" },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: "#ff5252",
+                                    },
+                                },
+                            }}
+                            name="current_password"
+                            label="Current Password"
+                            type={showPassword.current ? "text" : "password"}
+                            fullWidth
+                            value={password.current_password}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            sx={{ color: "#ccc" }}
+                                            onClick={() =>
+                                                setShowPassword((p) => ({
+                                                    ...p,
+                                                    current: !p.current,
+                                                }))
+                                            }
+                                            edge="end"
+                                        >
+                                            {showPassword.current ? (
+                                                <VisibilityOff />
+                                            ) : (
+                                                <Visibility />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+
+                    {/* Buttons */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            gap: 2,
+                            width: "100%",
+                            mt: 2,
+                        }}
+                    >
+                        <Button
+                            onClick={() => {
+                                mutationDelete.mutate(password);
+                                handleClose();
+                            }}
+                            variant="contained"
+                            sx={{
+                                flex: 1,
+                                bgcolor: "#ff1744",
+                                "&:hover": { bgcolor: "#d50000" },
+                                color: "white",
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                py: 1,
+                            }}
+                        >
+                            Delete
+                        </Button>
+
+                        <Button
+                            onClick={handleClose}
+                            variant="outlined"
+                            sx={{
+                                flex: 1,
+                                borderColor: "#888",
+                                color: "#ddd",
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                py: 1,
+                                "&:hover": {
+                                    borderColor: "#ccc",
+                                    backgroundColor: "rgba(255,255,255,0.05)",
+                                },
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
         </Paper>
     );
 }
