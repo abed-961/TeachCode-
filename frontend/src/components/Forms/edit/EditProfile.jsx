@@ -452,10 +452,13 @@ export default function ProfileSetting({ setAlert }) {
                             className="btn"
                             size="large"
                         >
-                            {!isChange
-                                ? "Please Change Your Information And Type your current Password Before Submiting"
-                                : " Save Changes "}
+                            {" "}
+                            Save Changes
                         </Button>
+                        <p style={{ color: "white", textAlign: "center" }}>
+                            Please Change Your Information And Type your current
+                            Password Before Submiting
+                        </p>
                     </Grid>
                 </Grid>
             </Box>

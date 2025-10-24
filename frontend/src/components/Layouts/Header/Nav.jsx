@@ -25,10 +25,13 @@ export default function Nav() {
                 ) : (
                     <Grid container sx={{ display: "flex", gap: 5 }}>
                         <Grid className="btn">
-                            <Link to="profile/view">Profile</Link>
+                            <Link to="/">Home</Link>
                         </Grid>
                         <Grid className="btn">
                             <Link to="register">Info</Link>
+                        </Grid>
+                        <Grid className="btn">
+                            <Link to="profile/view">Profile</Link>
                         </Grid>
                     </Grid>
                 )}
