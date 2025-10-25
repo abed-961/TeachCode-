@@ -42,6 +42,10 @@ body {
     height: 100vh;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 .c-white {
     color: var(--color-gray-200);
 }

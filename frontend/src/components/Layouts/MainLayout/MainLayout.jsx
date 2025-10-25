@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import "./MainLayout.css";
-import Sidebar from "../SideBar/SideBar";
 
 import LoadingScreenPage from "../LoadingScreen/LoadingScreen";
 
@@ -13,9 +12,6 @@ export default function MainLayout() {
             <Box className="main-grid">
                 <Box className="header">
                     <Header />
-                </Box>
-                <Box className="sidebar">
-                    <Sidebar />
                 </Box>
 
                 <Box className="content">

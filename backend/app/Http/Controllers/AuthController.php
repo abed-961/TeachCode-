@@ -22,6 +22,7 @@ class AuthController extends Controller
             $id = Auth::user()->id;
             $user = User::find($id);
             $user->createToken('user-token')->plainTextToken;
+            session('user', $user);
             return Response::success('login successfully', $user);
         }
 
