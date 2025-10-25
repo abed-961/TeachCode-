@@ -8,8 +8,8 @@
     grid-template-rows: var(--header-h) 1fr var(--footer-h);
     grid-template-areas:
         "header header"
-        "sidebar content"
-        "sidebar footer";
+        " content content"
+        " footer footer";
     gap: var(--gap);
     background: linear-gradient(
         180deg,
@@ -27,8 +27,7 @@
 
 .header,
 .content,
-.footer,
-.sidebar {
+.footer {
     border: 1px solid var(--muted);
 }
 
@@ -99,51 +98,6 @@ a {
     box-shadow: 0 -6px 18px rgba(2, 12, 24, 0.18);
 }
 
-/* Sidebar */
-.sidebar {
-    grid-area: sidebar;
-    padding: 18px;
-    border-radius: var(--radius);
-    box-shadow: 6px 12px 30px rgba(2, 12, 24, 0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-self: stretch;
-    position: sticky;
-    top: 16px;
-    overflow: auto;
-    transition: transform 0.28s ease, box-shadow 0.28s ease;
-}
-
-/* Sidebar items */
-.sidebar .nav {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.sidebar a {
-    color: var(--surface);
-    text-decoration: none;
-    padding: 10px 12px;
-    border-radius: 8px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    transition: background 0.18s ease, transform 0.12s ease;
-    font-weight: 500;
-}
-.sidebar a:hover,
-.sidebar a:focus {
-    background: rgba(255, 255, 255, 0.04);
-    transform: translateX(6px);
-    outline: none;
-}
-.sidebar .logo {
-    font-weight: 700;
-    font-size: 1.05rem;
-    margin-bottom: 6px;
-}
-
 .svg {
     width: 300px;
     height: 300px;
@@ -191,11 +145,13 @@ a {
     background-clip: padding-box;
 }
 
-/* Responsive: collapse to single column and use off-canvas sidebar */
+.main > * {
+    height: 30vh;
+    border-bottom: 2px dotted var(--surface);
+    padding: 10px;
+}
+
 @media (max-width: 900px) {
-    :root {
-        --sidebar-w: 320px;
-    } /* slightly wider off-canvas */
     .main-grid {
         grid-template-columns: 1fr;
         grid-template-rows: var(--header-h) 1fr var(--footer-h);
@@ -204,44 +160,6 @@ a {
             "content"
             "footer";
         padding: 12px;
-    }
-
-    /* Sidebar becomes off-canvas */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        width: var(--sidebar-w);
-        transform: translateX(-110%);
-        z-index: 1200;
-        box-shadow: 12px 12px 48px rgba(2, 12, 24, 0.6);
-        border-radius: 0 12px 12px 0;
-        padding-top: var(--header-h);
-        transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
-    }
-
-    /* when parent has this class, sidebar opens */
-    .main-grid.sidebar-open .sidebar {
-        transform: translateX(0);
-    }
-
-    /* dim overlay when open */
-    .main-grid.sidebar-open::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: rgba(2, 8, 18, 0.45);
-        z-index: 1100;
-        pointer-events: auto;
-    }
-
-    /* show toggle */
-    .header .sidebar-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
     }
 
     /* header styling for mobile */
@@ -256,12 +174,6 @@ a {
     .footer {
         padding: 12px;
     }
-
-    /* make sidebar items easier to tap */
-    .sidebar a {
-        padding: 14px 16px;
-        font-size: 1rem;
-    }
 }
 
 /* Very small screens: tighten spacing */
@@ -273,8 +185,5 @@ a {
     }
     .header .title {
         font-size: 0.95rem;
-    }
-    .sidebar {
-        width: 280px;
     }
 }

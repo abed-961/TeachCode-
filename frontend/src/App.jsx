@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetUser } from "./services/UserServices.jsx";
 import LoadingScreenPage from "./components/Layouts/LoadingScreen/LoadingScreen.jsx";
 import ProfileView from "./components/Forms/edit/ProfileView.jsx";
+import Main_Component from "./main/Main_Component.jsx";
 
 function App() {
     const [alert, setAlert] = useState({ message: null, type: null });
@@ -61,7 +62,7 @@ function App() {
                         <Image src={Blur1} className="svg" />
                         <Routes>
                             <Route path="/" element={<MainLayout />}>
-                                <Route index element={<div>Home Page</div>} />
+                                <Route index element={<Main_Component />} />
                                 <Route
                                     path="profile/setting"
                                     element={
