@@ -1,0 +1,208 @@
+import React, { useState } from "react";
+import {
+    Box,
+    Button,
+    TextField,
+    Typography,
+    Grid,
+    MenuItem,
+} from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { PostCourse } from "../../../services/CoursesService";
+import { useNavigate } from "react-router-dom";
+import { GetInstructors } from "../../../services/InstructorService";
+
+export default function CourseForm({ setAlert }) {
+    const nav = useNavigate();
+    const [errorForm, setErrorForm] = useState({});
+    const [formData, setFormData] = useState({
+        name: "",
+        teaching_hours: "",
+        duration_weeks: "",
+        description: "",
+        instructor_id: "",
+    });
+
+    const { data: instructors, isLoading } = useQuery({
+        queryKey: ["instructors"],
+        queryFn: GetInstructors,
+    });
+
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const addCourseMutation = useMutation({
+        mutationFn: PostCourse,
+        onSuccess: (res) => {
+            if (res.status) {
+                setErrorForm({});
+                setAlert(res.message, "success");
+                nav("/admin/courses");
+            } else {
+                setAlert("Something Went Wrong!", "error");
+            }
+        },
+
+        onError: (error) => {
+            setAlert("Something Went Wrong!", "error");
+            const errors = error.response.data.errors;
+            // Map Laravel errors to your form state
+            Object.keys(errors).forEach((key) => {
+                setErrorForm((prev) => ({
+                    ...prev,
+                    [key]: errors[key][0],
+                }));
+            });
+        },
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(formData);
+        addCourseMutation.mutate(formData);
+    };
+
+    const fieldsetStyle = {
+        input: { color: "white" },
+        label: { color: "white" },
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "gray", // default border color
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "gray", // border when focused
+            },
+        },
+    };
+
+    if (isLoading) return <div>Loading Data ...</div>;
+
+    return (
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ mx: "auto", mt: 4, width: "80%", minWidth: 300 }}
+            className="bg-main"
+        >
+            <Typography variant="h5" mb={3}>
+                Create New Course
+            </Typography>
+            <Grid container className="course-form-container" spacing={2}>
+                <Grid item xs={12}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="name"
+                        label="Course Name"
+                        fullWidth
+                        required
+                        error={!!errorForm.name}
+                        helperText={errorForm.name || ""}
+                        value={formData.name}
+                        onChange={handleChange}
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="description"
+                        label="Description"
+                        fullWidth
+                        required
+                        multiline
+                        minRows={2}
+                        value={formData.description}
+                        error={!!errorForm.description}
+                        helperText={errorForm.description || ""}
+                        onChange={handleChange}
+                        InputProps={{
+                            sx: {
+                                color: "white",
+                            },
+                        }}
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="teaching_hours"
+                        label="Teaching Hours"
+                        type="number"
+                        fullWidth
+                        required
+                        error={!!errorForm.teaching_hours}
+                        helperText={errorForm.teaching_hours || ""}
+                        value={formData.teaching_hours}
+                        onChange={handleChange}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="duration_weeks"
+                        label="Duration (Weeks)"
+                        type="number"
+                        fullWidth
+                        required
+                        error={!!errorForm.duration_weeks}
+                        helperText={errorForm.duration_weeks || ""}
+                        value={formData.duration_weeks}
+                        onChange={handleChange}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        sx={[fieldsetStyle, { color: "white" }]}
+                        select
+                        name="instructor_id"
+                        label="Instructor"
+                        fullWidth
+                        required
+                        value={formData.instructor_id}
+                        onChange={handleChange}
+                        error={!!errorForm.instructor_id}
+                        helperText={errorForm.instructor_id || ""}
+                        InputProps={{
+                            sx: {
+                                color: "white",
+                            },
+                        }}
+                    >
+                        {instructors ? (
+                            instructors.map((ins) => (
+                                <MenuItem
+                                    key={ins.instructor.id}
+                                    value={ins.instructor.id}
+                                >
+                                    {ins.first_name + " " + ins.last_name}
+                                </MenuItem>
+                            ))
+                        ) : (
+                            <MenuItem key={0} value={0}>
+                                No Insturctors Applied Yet
+                            </MenuItem>
+                        )}
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sx={{ gridColumn: "span 2" }}>
+                    <Button
+                        className="btn"
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        fullWidth
+                    >
+                        Create Course
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
+    );
+}

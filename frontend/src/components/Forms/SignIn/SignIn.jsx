@@ -68,12 +68,12 @@ export default function Login({ setAlert }) {
             }
         },
         onError: (err) => {
+            setLoading(false);
             const errors = err.response.data.errors;
             setAlert(Object.entries(errors)[0][1][0], "error");
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({ ...prev, [key]: errors[key][0] }));
             });
-            setLoading(false);
         },
     });
     const togglePassword = () => setShow((prev) => !prev);

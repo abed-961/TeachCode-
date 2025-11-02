@@ -54,7 +54,7 @@
         var(--color-indigo-600)
     );
     box-shadow: 0 0 4px var(--surface);
-
+   
     transition: 0.5s ease;
 }
 

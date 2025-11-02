@@ -1,0 +1,28 @@
+.admin-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: space-evenly;
+    align-items: start;
+    gap: 20px;
+}
+
+.admin-grid-container button {
+    width: 120%;
+}
+
+.admin_pages {
+    display: grid;
+    grid-template-rows: 50px 4fr;
+    overflow-y: auto;
+}
+
+.course-form-container {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+}
+
+.instructor-form {
+    display: grid !important;
+    grid-template-columns: 1fr;
+}

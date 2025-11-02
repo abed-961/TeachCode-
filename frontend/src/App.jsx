@@ -21,6 +21,21 @@ import LoadingScreenPage from "./components/Layouts/LoadingScreen/LoadingScreen.
 import ProfileView from "./components/Forms/edit/ProfileView.jsx";
 import Main_Component from "./main/Main_Component.jsx";
 
+// admin
+import Admin_page from "./components/admin/Admin.jsx";
+//course
+import Courses from "./components/admin/Courses/Courses.jsx";
+import CoursesView from "./components/admin/Courses/CoursesView.jsx";
+import CourseForm from "./components/admin/Courses/CourseForm.jsx";
+import EditCourseForm from "./components/admin/Courses/EditCourse.jsx";
+import CourseProvider from "./services/Contexts/CourseContext.jsx";
+//instructor
+import Instructor from "./components/admin/instructor/Instructor.jsx";
+import Instructor_View from "./components/admin/instructor/InstructorView.jsx";
+import InstructorForm from "./components/admin/instructor/InstructorForm.jsx";
+import InstructorProvider from "./services/Contexts/InstructorContext.jsx";
+import Instructor_Edit from "./components/admin/instructor/EditInstructor.jsx";
+
 function App() {
     const [alert, setAlert] = useState({ message: null, type: null });
 
@@ -83,6 +98,91 @@ function App() {
                                         />
                                     }
                                 />
+                                <Route
+                                    path="admin/page"
+                                    element={<Admin_page />}
+                                />
+                                {/* Courses  */}
+                                <Route
+                                    path="admin/courses"
+                                    element={
+                                        <CourseProvider>
+                                            <Courses />
+                                        </CourseProvider>
+                                    }
+                                >
+                                    <Route
+                                        index
+                                        element={
+                                            <CoursesView
+                                                setAlert={(message, type) => {
+                                                    sendAlert(message, type);
+                                                }}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="form"
+                                        element={
+                                            <CourseForm
+                                                setAlert={(message, type) => {
+                                                    sendAlert(message, type);
+                                                }}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="edit"
+                                        element={
+                                            <EditCourseForm
+                                                setAlert={(message, type) => {
+                                                    sendAlert(message, type);
+                                                }}
+                                            />
+                                        }
+                                    />
+                                </Route>
+                                {/* Instructors */}
+
+                                <Route
+                                    path="admin/instructor"
+                                    element={
+                                        <InstructorProvider>
+                                            <Instructor />
+                                        </InstructorProvider>
+                                    }
+                                >
+                                    <Route
+                                        index
+                                        element={
+                                            <Instructor_View
+                                                setAlert={(message, type) =>
+                                                    sendAlert(message, type)
+                                                }
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="form"
+                                        element={
+                                            <InstructorForm
+                                                setAlert={(message, type) =>
+                                                    sendAlert(message, type)
+                                                }
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="edit"
+                                        element={
+                                            <Instructor_Edit
+                                                setAlert={(message, type) =>
+                                                    sendAlert(message, type)
+                                                }
+                                            />
+                                        }
+                                    />
+                                </Route>
                             </Route>
                             {/* login component */}
                             <Route

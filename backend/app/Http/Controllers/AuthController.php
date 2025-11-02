@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\updateUserRequest;
 use App\Models\User;
+use App\Util\Trim;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,8 @@ class AuthController extends Controller
     {
 
         $credentials = $request->validated();
-        if (Auth::attempt($credentials)) {
+        $trimedData = Trim::trimData($credentials);
+        if (Auth::attempt($trimedData)) {
             $id = Auth::user()->id;
             $user = User::find($id);
             $user->createToken('user-token')->plainTextToken;
@@ -31,8 +33,10 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+
         $data = $request->validated();
-        $user = User::create($data);
+        $trimedData = Trim::trimData($data);
+        $user = User::create($trimedData);
         Auth::login($user);
         $user->createToken("user-token");
         return Response::success('account Registered Successfully', $user);
@@ -83,5 +87,11 @@ class AuthController extends Controller
         $user->tokens()->delete();
         $user->delete();
         return Response::success("User Deleted Successfully");
+    }
+
+    public function applyInstructor()
+    {
+        $users = User::where('role', 'user')->get();
+        return Response::to_json($users);
     }
 }

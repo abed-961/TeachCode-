@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { UserContext } from "../../../services/Contexts/userContext";
 import LoadingScreenPage from "../LoadingScreen/LoadingScreen";
-
+//icons
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import HomeIcon from "@mui/icons-material/Home";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 export default function Nav() {
     const { user, isLoading } = useContext(UserContext);
 
@@ -25,13 +28,19 @@ export default function Nav() {
                 ) : (
                     <Grid container sx={{ display: "flex", gap: 5 }}>
                         <Grid className="btn">
-                            <Link to="/">Home</Link>
+                            <Link to="/">
+                                <HomeIcon className="c-white" />
+                            </Link>
                         </Grid>
                         <Grid className="btn">
-                            <Link to="register">Info</Link>
+                            <Link to="admin/page">
+                                <AdminPanelSettingsIcon className="c-icon" />
+                            </Link>
                         </Grid>
                         <Grid className="btn">
-                            <Link to="profile/view">Profile</Link>
+                            <Link to="profile/view">
+                                <PersonOutlineIcon className="c-white" />
+                            </Link>
                         </Grid>
                     </Grid>
                 )}

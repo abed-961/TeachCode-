@@ -24,7 +24,7 @@ export default function NotFound() {
                     borderRadius: "15px",
                 }}
             >
-                <p>..oops it's look like you seach about invalid route</p>
+                <p>..oops it's look like you search about invalid route</p>
                 <Link to="/" className="btn">
                     Back to Home
                 </Link>
