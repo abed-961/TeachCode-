@@ -54,4 +54,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function courses()
+    {
+        return User::belongsToMany(Course::class);
+    }
+
+    public function instructor()
+    {
+        return User::hasOne(Instructor_info::class);
+    }
 }

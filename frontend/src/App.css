@@ -23,3 +23,7 @@
 .h-100 {
     height: 100% !important;
 }
+a
+.c-icon {
+    color: var(--color-icon) !important;
+}

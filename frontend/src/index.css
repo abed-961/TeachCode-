@@ -16,6 +16,7 @@
     --btn-padding: 10px;
     --btn-radius: 8px;
 
+    --color-icon: #fff;
     --color-indigo-200: oklch(87% 0.065 274.039);
     --color-indigo-300: oklch(78.5% 0.115 274.713);
     --color-indigo-400: oklch(67.3% 0.182 276.935);
@@ -47,7 +48,7 @@ body {
 }
 
 .c-white {
-    color: var(--color-gray-200);
+    color: var(--color-gray-200) ;
 }
 
 .c-white-child * {

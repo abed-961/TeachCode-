@@ -51,7 +51,7 @@ const inputStyle = {
 export default function ProfileSetting({ setAlert }) {
     const [open, setOpen] = useState();
     const [error, setError] = useState({});
-    const [photo, setPhoto] = useState("");
+    const [photo, setPhoto] = useState("hello");
     const [isChange, setIsChange] = useState(false);
     const [showPassword, setShowPassword] = useState({
         current: false,
@@ -67,6 +67,8 @@ export default function ProfileSetting({ setAlert }) {
         region: "",
         role: "user",
     });
+
+    useEffect(() => {}, []);
 
     const [password, setPassword] = useState({
         current_password: "",

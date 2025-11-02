@@ -17,23 +17,28 @@ class Response
 
     public static function success($message, $data = null)
     {
-        return self::to_json(true, $message, $data);
+        $data = [
+            "status" => true,
+            "message" => $message,
+            "data" => $data
+        ];
+        return self::to_json($data);
     }
 
     public static function error($message, $data = null)
     {
-        return self::to_json(false, $message, $data);
+        $data = [
+            "status" => false,
+            "message" => $message,
+            "data" => $data
+        ];
+        return self::to_json($data);
     }
 
-    public static function to_json($status, $message, $data)
+    public static function to_json($data)
     {
         return response()->json(
-            [
-                'status' => $status,
-                'message' => $message,
-                'data' => $data
-            ]
-
+            $data
         );
     }
 }

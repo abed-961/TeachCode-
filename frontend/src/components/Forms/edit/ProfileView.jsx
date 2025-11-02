@@ -12,7 +12,10 @@ import { UserContext } from "../../../services/Contexts/userContext";
 import { photoUrl } from "../../../env/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { DeleteUser, LogoutUser } from "../../../services/UserServices";
+import { LogoutUser } from "../../../services/UserServices";
+//icons
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function ProfileView({ setAlert }) {
     const navigate = useNavigate();
@@ -113,7 +116,7 @@ export default function ProfileView({ setAlert }) {
                                 borderColor: "#dbdbdb",
                             }}
                         >
-                            Edit Profile
+                            <SettingsIcon className="c-icon" />
                         </Link>
                     </Box>
 
@@ -150,7 +153,7 @@ export default function ProfileView({ setAlert }) {
                         }}
                         onClick={handleOpen}
                     >
-                        logout
+                        <LogoutIcon sx={{ color: "red", mr: 1 }} /> logout
                     </Button>
                 </Grid>
                 <Grid item>
@@ -167,7 +170,7 @@ export default function ProfileView({ setAlert }) {
                             navigate("/profile/setting");
                         }}
                     >
-                        Setting Profile
+                        <SettingsIcon className="c-icon" /> Profile
                     </Button>
                 </Grid>
             </Grid>

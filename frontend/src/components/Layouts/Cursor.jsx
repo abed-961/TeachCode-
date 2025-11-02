@@ -9,6 +9,7 @@ export default function Cursor() {
     useEffect(() => {
         setMouse({ x: mouseMove.x, y: mouseMove.y });
     }, [mouseMove]);
+
     return (
         <Box
             sx={{
