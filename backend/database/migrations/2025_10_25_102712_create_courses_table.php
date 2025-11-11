@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('description');
             $table->integer('teaching_hours');
             $table->string('duration_weeks');
+            $table->date('start_date');
+            $table->integer('payment');
             $table->timestamps();
         });
     }

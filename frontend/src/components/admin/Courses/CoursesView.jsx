@@ -59,7 +59,7 @@ export default function CoursesView({ setAlert }) {
     return (
         <>
             <TableContainer
-                className="c-white-child"
+                className="c-white-child tables"
                 component={Paper}
                 sx={{
                     mt: 4,

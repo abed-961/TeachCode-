@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
@@ -35,8 +36,13 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("admin/instructors", [InstructorController::class, "instructorAll"]);
         Route::post("/admin/courses/add", [CourseController::class, "store"]);
         Route::get("/admin/courses", [CourseController::class, 'index']);
-        Route::patch("/admin/courses/{course}" , [CourseController::class , "editCourse"]);
-        Route::delete("/admin/courses/{course}" , [CourseController::class , "deleteCourse"]);
+        Route::patch("/admin/courses/{course}", [CourseController::class, "editCourse"]);
+        Route::delete("/admin/courses/{course}", [CourseController::class, "deleteCourse"]);
+
+        //users
+        Route::get("/clients", [AuthController::class, "clients"]);
+        Route::delete("clients/{user}/delete", [AdminController::class, "deleteUser"]);
+        Route::post("/user/add/course", [AdminController::class, "AddUserToCourse"]);
     });
 });
 

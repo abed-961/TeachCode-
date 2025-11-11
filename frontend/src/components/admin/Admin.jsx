@@ -19,7 +19,9 @@ export default function Admin_page() {
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Button className=" h-100 btn">Hello</Button>
+                        <Link to="/admin/users">
+                            <Button className=" h-100 btn">ْUsers</Button>
+                        </Link>
                     </Grid>
                     <Grid item>
                         <Button className=" h-100 btn">Hello</Button>

@@ -35,6 +35,10 @@ import Instructor_View from "./components/admin/instructor/InstructorView.jsx";
 import InstructorForm from "./components/admin/instructor/InstructorForm.jsx";
 import InstructorProvider from "./services/Contexts/InstructorContext.jsx";
 import Instructor_Edit from "./components/admin/instructor/EditInstructor.jsx";
+import Users from "./components/admin/Users/Users.jsx";
+import UsersView from "./components/admin/Users/UsersView.jsx";
+import UserInformations from "./components/admin/Users/userInformations/UserInformations.jsx";
+import UserCourseProvider from "./services/Contexts/UserCourseContext.jsx";
 
 function App() {
     const [alert, setAlert] = useState({ message: null, type: null });
@@ -98,6 +102,8 @@ function App() {
                                         />
                                     }
                                 />
+
+                               
                                 <Route
                                     path="admin/page"
                                     element={<Admin_page />}
@@ -143,7 +149,6 @@ function App() {
                                     />
                                 </Route>
                                 {/* Instructors */}
-
                                 <Route
                                     path="admin/instructor"
                                     element={
@@ -183,6 +188,27 @@ function App() {
                                         }
                                     />
                                 </Route>
+                                {/* Users */}
+                                <Route
+                                    path="admin/users"
+                                    element={
+                                        <UserCourseProvider>
+                                            <Users />
+                                        </UserCourseProvider>
+                                    }
+                                >
+                                    <Route index element={<UsersView />} />
+                                    <Route
+                                        path="user"
+                                        element={
+                                            <UserInformations
+                                                setAlert={(message, type) => {
+                                                    sendAlert(message, type);
+                                                }}
+                                            />
+                                        }
+                                    />
+                                </Route>
                             </Route>
                             {/* login component */}
                             <Route
@@ -212,6 +238,7 @@ function App() {
                         <Cursor />
                         {alert.message && (
                             <Alert
+                                sx={{ minWidth: "200px" }}
                                 severity={alert.type}
                                 className="alertMessage"
                             >

@@ -94,4 +94,15 @@ class AuthController extends Controller
         $users = User::where('role', 'user')->get();
         return Response::to_json($users);
     }
+
+    public function clients()
+    {
+        $clients = User::where("role", "user")
+            ->with(["instructor.courses"])
+            ->get();
+
+        return Response::to_json($clients);
+    }
+
+
 }

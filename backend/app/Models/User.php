@@ -57,7 +57,8 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return User::belongsToMany(Course::class);
+        return User::belongsToMany(Course::class, 'users_courses_subscription')
+            ->withTimestamps();
     }
 
     public function instructor()

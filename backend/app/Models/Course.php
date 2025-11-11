@@ -12,11 +12,14 @@ class Course extends Model
         'teaching_hours',
         'duration_weeks',
         'instructor_id',
+        'payment',
+        'start_date'
     ];
 
     public function users()
     {
-        return Course::belongsToMany(User::class);
+        return Course::belongsToMany(User::class, 'users_courses_subscription')
+        ->withTimestamps();
     }
 
     public function instructor()

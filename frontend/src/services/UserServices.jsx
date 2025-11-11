@@ -46,7 +46,7 @@ const DeleteUser = async (password) => {
 };
 
 const AllUser = async () => {
-    const response = await http.get("users");
+    const response = await http.get("/clients");
     return response.data;
 };
 

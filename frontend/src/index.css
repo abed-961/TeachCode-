@@ -10,12 +10,17 @@
     --padding: 20px;
     --gap: 20px;
     --header-h: 64px;
-    --footer-h: 64px;
+    --footer-h: 90px;
     --sidebar-w: 260px;
+    --bg-card: linear-gradient(
+        140deg,
+        var(--accent),
+        rgb(75, 75, 185),
+        rgba(47, 47, 47, 0.661)
+    );
 
-    --btn-padding: 10px;
+    --btn-padding: 20px;
     --btn-radius: 8px;
-
     --color-icon: #fff;
     --color-indigo-200: oklch(87% 0.065 274.039);
     --color-indigo-300: oklch(78.5% 0.115 274.713);
@@ -48,7 +53,7 @@ body {
 }
 
 .c-white {
-    color: var(--color-gray-200) ;
+    color: var(--color-gray-200);
 }
 
 .c-white-child * {

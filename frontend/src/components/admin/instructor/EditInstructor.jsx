@@ -246,7 +246,7 @@ export default function Instructor_Edit({ setAlert }) {
                             marginBottom: "8px",
                         }}
                     >
-                        Are you sure you want to delete this course .
+                        Are you sure you want to delete this Instructor .
                     </h2>
 
                     <Box
@@ -261,9 +261,7 @@ export default function Instructor_Edit({ setAlert }) {
                         <Button
                             onClick={() => {
                                 handleClose();
-                                deleteInstructorMutation.mutate(
-                                    formData.instructor.id
-                                );
+                                deleteInstructorMutation.mutate(formData.id);
                             }}
                             variant="containedF"
                             sx={{

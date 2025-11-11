@@ -1,6 +1,8 @@
 import axios from "axios";
 
+// export const url = "http://192.168.10.55:8000";
 export const url = "http://localhost:8000";
+
 export const photoUrl = url + "/storage";
 
 // Create a single reusable instance

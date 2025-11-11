@@ -26,7 +26,10 @@ class AddCourseRequest extends FormRequest
             'description' => ['required', 'string', 'max:1000'],
             'teaching_hours' => ['required', 'integer', 'min:1'],
             'duration_weeks' => ['required', 'integer', 'min:1'],
-            'instructor_id' => ['required', 'exists:instructor_infos,id']
+            'instructor_id' => ['required', 'exists:instructor_infos,id'],
+            'payment' => ['required', 'numeric', 'min:0'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
         ];
+
     }
 }

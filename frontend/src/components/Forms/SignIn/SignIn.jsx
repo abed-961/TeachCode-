@@ -156,6 +156,7 @@ export default function Login({ setAlert }) {
                 </Button>
                 <Box
                     display="flex"
+                    flexWrap="wrap"
                     justifyContent="space-between"
                     mt={1}
                     fontSize="0.9rem"

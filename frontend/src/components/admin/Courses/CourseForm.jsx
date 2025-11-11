@@ -21,6 +21,8 @@ export default function CourseForm({ setAlert }) {
         duration_weeks: "",
         description: "",
         instructor_id: "",
+        payment: "",
+        start_date: "",
     });
 
     const { data: instructors, isLoading } = useQuery({
@@ -46,11 +48,9 @@ export default function CourseForm({ setAlert }) {
                 setAlert("Something Went Wrong!", "error");
             }
         },
-
         onError: (error) => {
             setAlert("Something Went Wrong!", "error");
             const errors = error.response.data.errors;
-            // Map Laravel errors to your form state
             Object.keys(errors).forEach((key) => {
                 setErrorForm((prev) => ({
                     ...prev,
@@ -62,7 +62,6 @@ export default function CourseForm({ setAlert }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         addCourseMutation.mutate(formData);
     };
 
@@ -71,11 +70,10 @@ export default function CourseForm({ setAlert }) {
         label: { color: "white" },
         "& .MuiOutlinedInput-root": {
             "& fieldset": {
-                borderColor: "gray", // default border color
+                borderColor: "gray",
             },
-
             "&.Mui-focused fieldset": {
-                borderColor: "gray", // border when focused
+                borderColor: "gray",
             },
         },
     };
@@ -92,6 +90,7 @@ export default function CourseForm({ setAlert }) {
             <Typography variant="h5" mb={3}>
                 Create New Course
             </Typography>
+
             <Grid container className="course-form-container" spacing={2}>
                 <Grid item xs={12}>
                     <TextField
@@ -121,9 +120,7 @@ export default function CourseForm({ setAlert }) {
                         helperText={errorForm.description || ""}
                         onChange={handleChange}
                         InputProps={{
-                            sx: {
-                                color: "white",
-                            },
+                            sx: { color: "white" },
                         }}
                     />
                 </Grid>
@@ -157,6 +154,40 @@ export default function CourseForm({ setAlert }) {
                         onChange={handleChange}
                     />
                 </Grid>
+
+                {/* 🆕 Payment Field */}
+                <Grid item xs={6}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="payment"
+                        label="Payment ($)"
+                        type="number"
+                        fullWidth
+                        required
+                        error={!!errorForm.payment}
+                        helperText={errorForm.payment || ""}
+                        value={formData.payment}
+                        onChange={handleChange}
+                    />
+                </Grid>
+
+                {/* 🆕 Starting Date Field */}
+                <Grid item xs={6}>
+                    <TextField
+                        sx={fieldsetStyle}
+                        name="start_date"
+                        label="Starting Date"
+                        type="date"
+                        fullWidth
+                        required
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errorForm.start_date}
+                        helperText={errorForm.start_date || ""}
+                        value={formData.start_date}
+                        onChange={handleChange}
+                    />
+                </Grid>
+
                 <Grid item xs={12}>
                     <TextField
                         sx={[fieldsetStyle, { color: "white" }]}
@@ -170,12 +201,10 @@ export default function CourseForm({ setAlert }) {
                         error={!!errorForm.instructor_id}
                         helperText={errorForm.instructor_id || ""}
                         InputProps={{
-                            sx: {
-                                color: "white",
-                            },
+                            sx: { color: "white" },
                         }}
                     >
-                        {instructors ? (
+                        {instructors && instructors.length > 0 ? (
                             instructors.map((ins) => (
                                 <MenuItem
                                     key={ins.instructor.id}
@@ -186,11 +215,12 @@ export default function CourseForm({ setAlert }) {
                             ))
                         ) : (
                             <MenuItem key={0} value={0}>
-                                No Insturctors Applied Yet
+                                No Instructors Available
                             </MenuItem>
                         )}
                     </TextField>
                 </Grid>
+
                 <Grid item xs={12} sx={{ gridColumn: "span 2" }}>
                     <Button
                         className="btn"
