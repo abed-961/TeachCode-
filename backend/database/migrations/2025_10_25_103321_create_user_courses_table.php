@@ -14,8 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
-            $table->date('start_date');
-            $table->integer('payment')->default(10);
+            
             $table->timestamps();
         });
     }

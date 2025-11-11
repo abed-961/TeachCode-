@@ -168,8 +168,6 @@ export default function ProfileSetting({ setAlert }) {
                     <Grid item xs={12} className="w-100-c" textAlign="center">
                         <div
                             style={{
-                                width: "70%",
-                                margin: "0 auto",
                                 aspectRatio: "16 / 9",
                             }}
                         >
