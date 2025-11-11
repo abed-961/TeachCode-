@@ -17,7 +17,10 @@ export default function Nav() {
         <>
             <Grid container spacing={2} className="nav-links">
                 {!user ? (
-                    <Box sx={{ display: "flex", gap: 5 }}>
+                    <Box
+                        sx={{ display: "flex" }}
+                        spacing={{ xs: 2, sm: 3, md: 5 }}
+                    >
                         <Grid className="btn">
                             <Link to="signin">Log In</Link>
                         </Grid>
@@ -26,7 +29,11 @@ export default function Nav() {
                         </Grid>
                     </Box>
                 ) : (
-                    <Grid container sx={{ display: "flex", gap: 5 }}>
+                    <Grid
+                        container
+                        sx={{ display: "flex" }}
+                        spacing={{ xs: 2, sm: 3, md: 5 }}
+                    >
                         <Grid className="btn">
                             <Link to="/">
                                 <HomeIcon className="c-white" />
