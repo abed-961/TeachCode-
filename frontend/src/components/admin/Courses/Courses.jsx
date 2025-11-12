@@ -5,7 +5,7 @@ import { Link, Outlet } from "react-router-dom";
 export default function Courses() {
     return (
         <>
-            <Box className="h-100 admin_pages">
+            <Box className="h-100 admin_pages" sx={{ p : 4}}>
                 <Grid container className=" h-100 admin-grid-container">
                     <Grid item>
                         <Link to="/admin/courses">

@@ -17,38 +17,36 @@ export default function Nav() {
         <>
             <Grid container spacing={2} className="nav-links">
                 {!user ? (
-                    <Box
+                    <Grid
+                        container
                         sx={{ display: "flex" }}
                         spacing={{ xs: 2, sm: 3, md: 5 }}
                     >
-                        <Grid className="btn">
-                            <Link to="signin">Log In</Link>
-                        </Grid>
-                        <Grid className="btn">
-                            <Link to="register">Register</Link>
-                        </Grid>
-                    </Box>
+                        <Link to="signin" className="btn">
+                            Log In
+                        </Link>
+
+                        <Link to="register" className="btn">
+                            Register
+                        </Link>
+                    </Grid>
                 ) : (
                     <Grid
                         container
                         sx={{ display: "flex" }}
                         spacing={{ xs: 2, sm: 3, md: 5 }}
                     >
-                        <Grid className="btn">
-                            <Link to="/">
-                                <HomeIcon className="c-white" />
-                            </Link>
-                        </Grid>
-                        <Grid className="btn">
-                            <Link to="admin/page">
-                                <AdminPanelSettingsIcon className="c-icon" />
-                            </Link>
-                        </Grid>
-                        <Grid className="btn">
-                            <Link to="profile/view">
-                                <PersonOutlineIcon className="c-white" />
-                            </Link>
-                        </Grid>
+                        <Link to="/" className="btn">
+                            <HomeIcon className="c-white" />
+                        </Link>
+
+                        <Link to="admin/page" className="btn">
+                            <AdminPanelSettingsIcon className="c-icon" />
+                        </Link>
+
+                        <Link to="profile/view" className="btn">
+                            <PersonOutlineIcon className="c-white" />
+                        </Link>
                     </Grid>
                 )}
             </Grid>

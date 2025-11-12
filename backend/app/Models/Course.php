@@ -19,11 +19,16 @@ class Course extends Model
     public function users()
     {
         return Course::belongsToMany(User::class, 'users_courses_subscription')
-        ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function instructor()
     {
         return Course::belongsTo(Instructor_info::class);
+    }
+
+    public function outcomes()
+    {
+        return $this->hasMany(CourseOutcome::class);
     }
 }

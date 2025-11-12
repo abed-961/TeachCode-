@@ -6,6 +6,8 @@ import {
     Typography,
     Grid,
     MenuItem,
+    Stack,
+    Chip
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { PostCourse } from "../../../services/CoursesService";
@@ -14,6 +16,7 @@ import { GetInstructors } from "../../../services/InstructorService";
 
 export default function CourseForm({ setAlert }) {
     const nav = useNavigate();
+    const [outcomeInput, setOutcomeInput] = useState("");
     const [errorForm, setErrorForm] = useState({});
     const [formData, setFormData] = useState({
         name: "",
@@ -23,6 +26,7 @@ export default function CourseForm({ setAlert }) {
         instructor_id: "",
         payment: "",
         start_date: "",
+        outcomes : ""
     });
 
     const { data: instructors, isLoading } = useQuery({
@@ -34,6 +38,23 @@ export default function CourseForm({ setAlert }) {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
+        }));
+    };
+    // 🆕 Add new outcome
+    const handleAddOutcome = () => {
+        if (outcomeInput.trim() === "") return;
+        setFormData((prev) => ({
+            ...prev,
+            outcomes: [...prev.outcomes, outcomeInput.trim()],
+        }));
+        setOutcomeInput("");
+    };
+
+    // 🆕 Remove outcome
+    const handleRemoveOutcome = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            outcomes: prev.outcomes.filter((_, i) => i !== index),
         }));
     };
 
@@ -219,6 +240,46 @@ export default function CourseForm({ setAlert }) {
                             </MenuItem>
                         )}
                     </TextField>
+                </Grid>
+                {/* 🆕 Outcomes Field */}
+                <Grid item xs={12}>
+                    <Typography variant="h6" mt={2} mb={1}>
+                        Outcomes
+                    </Typography>
+                    <Box display="flex" gap={2}>
+                        <TextField
+                            sx={fieldsetStyle}
+                            label="Add an outcome"
+                            value={outcomeInput}
+                            onChange={(e) => setOutcomeInput(e.target.value)}
+                            fullWidth
+                        />
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleAddOutcome}
+                        >
+                            Add
+                        </Button>
+                    </Box>
+
+                    <Stack direction="row" flexWrap="wrap" gap={1} mt={2}>
+                        {formData.outcomes &&
+                            formData.outcomes.map((out, i) => (
+                                <Chip
+                                    key={i}
+                                    label={out}
+                                    color="primary"
+                                    onDelete={() => handleRemoveOutcome(i)}
+                                />
+                            ))}
+                    </Stack>
+
+                    {errorForm.outcomes && (
+                        <Typography color="error" variant="body2" mt={1}>
+                            {errorForm.outcomes}
+                        </Typography>
+                    )}
                 </Grid>
 
                 <Grid item xs={12} sx={{ gridColumn: "span 2" }}>

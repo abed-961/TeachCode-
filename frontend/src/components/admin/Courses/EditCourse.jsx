@@ -6,6 +6,7 @@ import {
     Grid,
     MenuItem,
     Button,
+    Chip,
 } from "@mui/material";
 import { CourseContext } from "../../../services/Contexts/CourseContext";
 import { useNavigate } from "react-router-dom";
@@ -18,11 +19,10 @@ const fieldsetStyle = {
     label: { color: "white" },
     "& .MuiOutlinedInput-root": {
         "& fieldset": {
-            borderColor: "gray", // default border color
+            borderColor: "gray",
         },
-
         "&.Mui-focused fieldset": {
-            borderColor: "gray", // border when focused
+            borderColor: "gray",
         },
     },
 };
@@ -36,30 +36,55 @@ export default function EditCourseForm({ setAlert }) {
         teaching_hours: "",
         duration_weeks: "",
         description: "",
-        instructor: { name: "", id: 0 },
+        instructor_id: 0,
+        outcomes: [],
     });
+    const [outcomeInput, setOutcomeInput] = useState("");
 
     useEffect(() => {
         if (!course) {
             nav("/admin/courses");
             return;
         }
-        setFormData(course);
-        setFormData((prev) => ({ ...prev, instructor: null }));
+        // normalize outcomes to array
+        setFormData({
+            ...course,
+            outcomes: course.outcomes.map((e) => e.description),
+            instructor_id: course.instructor?.id || 0,
+        });
     }, [nav, course]);
 
     const { data: instructors } = useQuery({
         queryKey: ["instructors"],
         queryFn: GetInstructors,
     });
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
+        }));
+    };
+
+    // Handle outcomes safely
+    const handleAddOutcome = () => {
+        const val = outcomeInput.trim();
+        if (!val) return;
+        setFormData((prev) => ({
+            ...prev,
+            outcomes: Array.isArray(prev.outcomes)
+                ? [...prev.outcomes, val]
+                : [val],
+        }));
+        setOutcomeInput("");
+    };
+
+    const handleRemoveOutcome = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            outcomes: Array.isArray(prev.outcomes)
+                ? prev.outcomes.filter((_, i) => i !== index)
+                : [],
         }));
     };
 
@@ -85,7 +110,7 @@ export default function EditCourseForm({ setAlert }) {
 
     return (
         <Box
-            sx={{ mx: "auto", mt: 4 }}
+            sx={{ mx: "auto", mt: 4, p: 4 }}
             className="w-100 bg-main"
             component="form"
             onSubmit={handleSubmit}
@@ -117,14 +142,10 @@ export default function EditCourseForm({ setAlert }) {
                         value={formData.description}
                         onChange={handleChange}
                         InputProps={{
-                            sx: {
-                                color: "white", // text color
-                            },
+                            sx: { color: "white" },
                         }}
                         InputLabelProps={{
-                            sx: {
-                                color: "white", // label color
-                            },
+                            sx: { color: "white" },
                         }}
                     />
                 </Grid>
@@ -160,18 +181,10 @@ export default function EditCourseForm({ setAlert }) {
                         name="instructor_id"
                         label="Instructor"
                         fullWidth
-                        value={
-                            formData
-                                ? formData.instructor_id
-                                    ? formData.instructor_id
-                                    : 0
-                                : 0
-                        }
+                        value={formData.instructor_id || 0}
                         onChange={handleChange}
                         InputProps={{
-                            sx: {
-                                color: "white", // text color
-                            },
+                            sx: { color: "white" },
                         }}
                     >
                         <MenuItem key={0} value={0} disabled>
@@ -187,6 +200,68 @@ export default function EditCourseForm({ setAlert }) {
                                 </MenuItem>
                             ))}
                     </TextField>
+                </Grid>
+
+                {/* Outcomes Section */}
+                <Grid item xs={12}>
+                    <Typography sx={{ color: "white", mb: 1 }}>
+                        Outcomes
+                    </Typography>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            gap: 1,
+                            alignItems: "center",
+                            mb: 1,
+                        }}
+                    >
+                        <TextField
+                            sx={{
+                                ...fieldsetStyle,
+                                flex: 1,
+                            }}
+                            label="Add Outcome"
+                            value={outcomeInput}
+                            onChange={(e) => setOutcomeInput(e.target.value)}
+                            InputProps={{
+                                sx: { color: "white" },
+                            }}
+                            InputLabelProps={{
+                                sx: { color: "white" },
+                            }}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleAddOutcome}
+                            sx={{ whiteSpace: "nowrap" }}
+                        >
+                            Add
+                        </Button>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 1,
+                            maxHeight: 150,
+                            overflowY: "auto",
+                        }}
+                    >
+                        {Array.isArray(formData.outcomes) &&
+                            formData.outcomes.map((out, i) => (
+                                <Chip
+                                    key={i}
+                                    label={out}
+                                    onDelete={() => handleRemoveOutcome(i)}
+                                    color="primary"
+                                    sx={{
+                                        color: "white",
+                                    }}
+                                />
+                            ))}
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12} sx={{ gridColumn: "span 2" }}>

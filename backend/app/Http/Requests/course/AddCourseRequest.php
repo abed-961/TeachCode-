@@ -29,6 +29,8 @@ class AddCourseRequest extends FormRequest
             'instructor_id' => ['required', 'exists:instructor_infos,id'],
             'payment' => ['required', 'numeric', 'min:0'],
             'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'outcomes' => ['required', 'array', 'min:1'],
+            'outcomes.*' => ['string', 'max:255'],
         ];
 
     }

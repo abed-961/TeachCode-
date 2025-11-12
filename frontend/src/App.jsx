@@ -39,6 +39,7 @@ import Users from "./components/admin/Users/Users.jsx";
 import UsersView from "./components/admin/Users/UsersView.jsx";
 import UserInformations from "./components/admin/Users/userInformations/UserInformations.jsx";
 import UserCourseProvider from "./services/Contexts/UserCourseContext.jsx";
+import CourseDetails from "./components/user/CourseDetails.jsx";
 
 function App() {
     const [alert, setAlert] = useState({ message: null, type: null });
@@ -74,178 +75,209 @@ function App() {
         return (
             <>
                 <UserProvider value={{ user, setUser, isLoading, refetch }}>
-                    <Box sx={{ width: "100%", overflow: "hidden" }}>
-                        <Image src={Blur1} className="svg" />
-                        <Image src={Blur1} className="svg" />
-                        <Image src={Background} className="svg" />
-                        <Image src={Blur1} className="svg" />
-                        <Routes>
-                            <Route path="/" element={<MainLayout />}>
-                                <Route index element={<Main_Component />} />
-                                <Route
-                                    path="profile/setting"
-                                    element={
-                                        <ProfileSetting
-                                            setAlert={(message, type) =>
-                                                sendAlert(message, type)
+                    <CourseProvider>
+                        <Box sx={{ width: "100%", overflow: "hidden" }}>
+                            <Image src={Blur1} className="svg" />
+                            <Image src={Blur1} className="svg" />
+                            <Image src={Background} className="svg" />
+                            <Image src={Blur1} className="svg" />
+                            <Routes>
+                                <Route path="/" element={<MainLayout />}>
+                                    <Route index element={<Main_Component />} />
+                                    <Route
+                                        path="profile/setting"
+                                        element={
+                                            <ProfileSetting
+                                                setAlert={(message, type) =>
+                                                    sendAlert(message, type)
+                                                }
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="profile/view"
+                                        element={
+                                            <ProfileView
+                                                setAlert={(message, type) => {
+                                                    sendAlert(message, type);
+                                                }}
+                                            />
+                                        }
+                                    />
+
+                                    <Route
+                                        path="admin/page"
+                                        element={<Admin_page />}
+                                    />
+                                    {/* Courses  */}
+                                    <Route
+                                        path="admin/courses"
+                                        element={
+                                            <CourseProvider>
+                                                <Courses />
+                                            </CourseProvider>
+                                        }
+                                    >
+                                        <Route
+                                            index
+                                            element={
+                                                <CoursesView
+                                                    setAlert={(
+                                                        message,
+                                                        type
+                                                    ) => {
+                                                        sendAlert(
+                                                            message,
+                                                            type
+                                                        );
+                                                    }}
+                                                />
                                             }
                                         />
-                                    }
-                                />
+                                        <Route
+                                            path="form"
+                                            element={
+                                                <CourseForm
+                                                    setAlert={(
+                                                        message,
+                                                        type
+                                                    ) => {
+                                                        sendAlert(
+                                                            message,
+                                                            type
+                                                        );
+                                                    }}
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path="edit"
+                                            element={
+                                                <EditCourseForm
+                                                    setAlert={(
+                                                        message,
+                                                        type
+                                                    ) => {
+                                                        sendAlert(
+                                                            message,
+                                                            type
+                                                        );
+                                                    }}
+                                                />
+                                            }
+                                        />
+                                    </Route>
+                                    {/* Instructors */}
+                                    <Route
+                                        path="admin/instructor"
+                                        element={
+                                            <InstructorProvider>
+                                                <Instructor />
+                                            </InstructorProvider>
+                                        }
+                                    >
+                                        <Route
+                                            index
+                                            element={
+                                                <Instructor_View
+                                                    setAlert={(message, type) =>
+                                                        sendAlert(message, type)
+                                                    }
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path="form"
+                                            element={
+                                                <InstructorForm
+                                                    setAlert={(message, type) =>
+                                                        sendAlert(message, type)
+                                                    }
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path="edit"
+                                            element={
+                                                <Instructor_Edit
+                                                    setAlert={(message, type) =>
+                                                        sendAlert(message, type)
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    </Route>
+                                    {/* Users */}
+                                    <Route
+                                        path="admin/users"
+                                        element={
+                                            <UserCourseProvider>
+                                                <Users />
+                                            </UserCourseProvider>
+                                        }
+                                    >
+                                        <Route index element={<UsersView />} />
+                                        <Route
+                                            path="user"
+                                            element={
+                                                <UserInformations
+                                                    setAlert={(
+                                                        message,
+                                                        type
+                                                    ) => {
+                                                        sendAlert(
+                                                            message,
+                                                            type
+                                                        );
+                                                    }}
+                                                />
+                                            }
+                                        />
+                                    </Route>
+
+                                    {/* User Routes */}
+                                    <Route
+                                        path="/course/details"
+                                        element={<CourseDetails />}
+                                    />
+                                </Route>
+                                {/* login component */}
                                 <Route
-                                    path="profile/view"
+                                    path="signin"
                                     element={
-                                        <ProfileView
+                                        <SignIn
                                             setAlert={(message, type) => {
                                                 sendAlert(message, type);
                                             }}
                                         />
                                     }
                                 />
-
-                               
+                                {/* register component */}
                                 <Route
-                                    path="admin/page"
-                                    element={<Admin_page />}
+                                    path="register"
+                                    element={
+                                        <Register
+                                            setAlert={(message, type) =>
+                                                sendAlert(message, type)
+                                            }
+                                        />
+                                    }
                                 />
-                                {/* Courses  */}
-                                <Route
-                                    path="admin/courses"
-                                    element={
-                                        <CourseProvider>
-                                            <Courses />
-                                        </CourseProvider>
-                                    }
-                                >
-                                    <Route
-                                        index
-                                        element={
-                                            <CoursesView
-                                                setAlert={(message, type) => {
-                                                    sendAlert(message, type);
-                                                }}
-                                            />
-                                        }
-                                    />
-                                    <Route
-                                        path="form"
-                                        element={
-                                            <CourseForm
-                                                setAlert={(message, type) => {
-                                                    sendAlert(message, type);
-                                                }}
-                                            />
-                                        }
-                                    />
-                                    <Route
-                                        path="edit"
-                                        element={
-                                            <EditCourseForm
-                                                setAlert={(message, type) => {
-                                                    sendAlert(message, type);
-                                                }}
-                                            />
-                                        }
-                                    />
-                                </Route>
-                                {/* Instructors */}
-                                <Route
-                                    path="admin/instructor"
-                                    element={
-                                        <InstructorProvider>
-                                            <Instructor />
-                                        </InstructorProvider>
-                                    }
-                                >
-                                    <Route
-                                        index
-                                        element={
-                                            <Instructor_View
-                                                setAlert={(message, type) =>
-                                                    sendAlert(message, type)
-                                                }
-                                            />
-                                        }
-                                    />
-                                    <Route
-                                        path="form"
-                                        element={
-                                            <InstructorForm
-                                                setAlert={(message, type) =>
-                                                    sendAlert(message, type)
-                                                }
-                                            />
-                                        }
-                                    />
-                                    <Route
-                                        path="edit"
-                                        element={
-                                            <Instructor_Edit
-                                                setAlert={(message, type) =>
-                                                    sendAlert(message, type)
-                                                }
-                                            />
-                                        }
-                                    />
-                                </Route>
-                                {/* Users */}
-                                <Route
-                                    path="admin/users"
-                                    element={
-                                        <UserCourseProvider>
-                                            <Users />
-                                        </UserCourseProvider>
-                                    }
-                                >
-                                    <Route index element={<UsersView />} />
-                                    <Route
-                                        path="user"
-                                        element={
-                                            <UserInformations
-                                                setAlert={(message, type) => {
-                                                    sendAlert(message, type);
-                                                }}
-                                            />
-                                        }
-                                    />
-                                </Route>
-                            </Route>
-                            {/* login component */}
-                            <Route
-                                path="signin"
-                                element={
-                                    <SignIn
-                                        setAlert={(message, type) => {
-                                            sendAlert(message, type);
-                                        }}
-                                    />
-                                }
-                            />
-                            {/* register component */}
-                            <Route
-                                path="register"
-                                element={
-                                    <Register
-                                        setAlert={(message, type) =>
-                                            sendAlert(message, type)
-                                        }
-                                    />
-                                }
-                            />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
 
-                        <Cursor />
-                        {alert.message && (
-                            <Alert
-                                sx={{ minWidth: "200px" }}
-                                severity={alert.type}
-                                className="alertMessage"
-                            >
-                                {alert.message}
-                            </Alert>
-                        )}
-                    </Box>
+                            <Cursor />
+                            {alert.message && (
+                                <Alert
+                                    sx={{ minWidth: "200px" }}
+                                    severity={alert.type}
+                                    className="alertMessage"
+                                >
+                                    {alert.message}
+                                </Alert>
+                            )}
+                        </Box>
+                    </CourseProvider>
                 </UserProvider>
             </>
         );

@@ -19,7 +19,6 @@ export default function VdSection() {
     const [text, setText] = useState("");
     const [advIndex, setAdvIndex] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [speed, setSpeed] = useState(80);
 
     useEffect(() => {
         const fullText = advantages[advIndex];
@@ -34,7 +33,7 @@ export default function VdSection() {
                     setAdvIndex((i) => (i + 1) % advantages.length);
                 }
             }
-        }, speed);
+        }, 80);
         return () => clearTimeout(timeout);
     }, [text, isDeleting, advIndex]);
     return (
@@ -63,7 +62,10 @@ export default function VdSection() {
                         {text}
                         <Box
                             component="span"
-                            sx={{ ml: 1, animation: "blink 1s infinite" }}
+                            sx={{
+                                ml: 1,
+                                animation: "blink 1s alternate",
+                            }}
                         >
                             |
                         </Box>

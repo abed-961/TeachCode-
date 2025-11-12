@@ -13,15 +13,33 @@ class CourseController extends Controller
 
     public function index()
     {
-        $courses = Course::with(['instructor.user'])->get();
+        $courses = Course::with(['instructor.user', 'outcomes'])->get();
         return Response::to_json($courses);
     }
     public function store(AddCourseRequest $request)
     {
-        $course = $request->validated();
-        $trimedCourse = Trim::trimData($course);
-        Course::create($trimedCourse);
-        return Response::success("Courses Added Successfully");
+        // Validate and trim data
+        $courseData = $request->validated();
+
+        $outcomes = $courseData['outcomes'] ?? [];
+        unset($courseData['outcomes']);
+
+        $trimmedCourse = Trim::trimData($courseData);
+
+
+        // Create the course
+        $course = Course::create($trimmedCourse);
+
+        // If there are outcomes, store them
+        if (!empty($outcomes)) {
+            foreach ($outcomes as $outcome) {
+                $course->outcomes()->create([
+                    'description' => trim($outcome),
+                ]);
+            }
+        }
+
+        return Response::success("Course Added Successfully");
     }
 
     public function editCourse(Course $course, AddCourseRequest $request)
@@ -29,6 +47,14 @@ class CourseController extends Controller
         $edited_course = $request->validated();
         $trimedCourse = Trim::trimData($edited_course);
         $course->update($trimedCourse);
+        $course->outcomes()->delete();
+        foreach ($edited_course['outcomes'] as $outcome) {
+            if (!empty($outcome))
+                $course->outcomes()->create([
+                    'description' => trim($outcome),
+                ]);
+        }
+
         return Response::success('course Edited successfully');
     }
 

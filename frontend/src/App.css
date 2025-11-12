@@ -38,3 +38,7 @@ a .c-icon {
 .border-white-child > * {
     border: 1px solid white !important;
 }
+
+.remove-scroll::-webkit-scrollbar {
+    display: none;
+}
